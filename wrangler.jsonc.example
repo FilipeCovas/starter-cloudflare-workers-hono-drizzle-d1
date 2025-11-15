@@ -15,7 +15,7 @@
       "binding": "",
       "database_name": "",
       "database_id": "",
-      "migrations_dir": "prisma/migrations",
+      "migrations_dir": "drizzle/migrations",
       "remote": true
     }
   ]

@@ -5,12 +5,16 @@ import { TaskDelete } from "./endpoints/taskDelete";
 import { TaskFetch } from "./endpoints/taskFetch";
 import { TaskList } from "./endpoints/taskList";
 import { IAppContext } from "./types";
+import { drizzle } from "drizzle-orm/d1";
 
 // Start a Hono app
 const app = new Hono<IAppContext>();
 
 app.use(async (c, next) => {
-  // add drizzle
+  if (!c.get("drizzle")) {
+    const db = drizzle(c.env.DB);
+    c.set("drizzle", db);
+  }
   return await next();
 });
 

@@ -1,6 +1,7 @@
 import { Bool, Num, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
 import { type AppContext, Task } from "../types";
+import { Tasks } from "../../drizzle/schema";
 
 export class TaskList extends OpenAPIRoute {
   schema = {
@@ -46,11 +47,11 @@ export class TaskList extends OpenAPIRoute {
 
     // Implement your own object list here
 
-    // const tasks = await c.get("prisma").task.findMany({});
+    const tasks = await c.get("drizzle").select().from(Tasks);
 
     return {
       success: true,
-      tasks: [],
+      tasks,
     };
   }
 }

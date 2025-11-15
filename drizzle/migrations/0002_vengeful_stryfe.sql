@@ -1,0 +1,1 @@
+DROP INDEX `tasks_description_unique`;

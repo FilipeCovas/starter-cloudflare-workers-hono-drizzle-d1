@@ -47,6 +47,8 @@ export class TaskCreate extends OpenAPIRoute {
       .get("prisma")
       .task.create({ data: taskToCreate as any }); */
 
+    //const result = await c.get("drizzle").select().from("users").all()
+
     // return the new task
     return {
       success: true,

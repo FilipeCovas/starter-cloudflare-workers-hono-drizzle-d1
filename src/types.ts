@@ -1,11 +1,12 @@
 import { DateTime, Str } from "chanfana";
+import { DrizzleD1Database } from "drizzle-orm/d1";
 import type { Context } from "hono";
 import { z } from "zod";
 
 export interface IAppContext {
   Bindings: Env;
   Variables: {
-    // drizzle: Drizzle;
+    drizzle: DrizzleD1Database;
   };
 }
 

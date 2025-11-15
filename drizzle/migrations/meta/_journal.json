@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1763221157023,
+      "tag": "0000_high_nighthawk",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1763221792747,
+      "tag": "0001_supreme_lily_hollister",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1763221839381,
+      "tag": "0002_vengeful_stryfe",
+      "breakpoints": true
+    }
+  ]
+}
