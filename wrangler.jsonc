@@ -4,22 +4,42 @@
  */
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "api-example-d1-prisma",
+  "name": "starter-cloudflare-workers-hono-drizzle-d1",
   "main": "src/index.ts",
   "compatibility_date": "2025-11-13",
+  "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true
-  }
-  /**"d1_databases": [
+  },
+  "vars": {
+    "ENVIRONMENT": "dev"
+  },
+  "d1_databases": [
     {
-      "binding": "",
-      "database_name": "",
-      "database_id": "",
+      "binding": "DB",
+      "database_name": "starter-cloudflare-workers-hono-drizzle-d1",
+      "database_id": "5cbd6f44-3dba-4fd4-a2d5-899c790728a2",
       "migrations_dir": "drizzle/migrations",
       "remote": true
     }
-  ]
- 
+  ],
+  "env": {
+    "production": {
+      "vars": {
+        "ENVIRONMENT": "production"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "starter-cloudflare-workers-hono-drizzle-d1",
+          "database_id": "5cbd6f44-3dba-4fd4-a2d5-899c790728a2",
+          "migrations_dir": "drizzle/migrations",
+          "remote": true
+        }
+      ]
+    }
+  }
+  /**
    * Smart Placement
    * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
    */
