@@ -20,7 +20,7 @@
       "database_name": "starter-cloudflare-workers-hono-drizzle-d1",
       "database_id": "5cbd6f44-3dba-4fd4-a2d5-899c790728a2",
       "migrations_dir": "drizzle/migrations",
-      "remote": true
+      "remote": false
     }
   ],
   "env": {
