@@ -7,21 +7,52 @@ import { TaskList } from "./endpoints/taskList";
 import { IAppContext } from "./types";
 import { drizzle } from "drizzle-orm/d1";
 import * as schema from "../drizzle/schema";
-
+import { HTTPException } from "hono/http-exception";
+import { cors } from "hono/cors";
+import { csrf } from "hono/csrf";
 // Start a Hono app
 const app = new Hono<IAppContext>();
 
-app.use(async (c, next) => {
+// Setup OpenAPI registry
+const openapi = fromHono(app, {
+  docs_url: "/",
+});
+
+openapi.use(
+  "*",
+  cors({
+    origin: ["http://example.com"],
+    allowHeaders: ["X-Custom-Header", "Upgrade-Insecure-Requests"],
+    allowMethods: ["POST", "GET", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    exposeHeaders: ["Content-Length", "X-Kuma-Revision"],
+    maxAge: 600,
+    credentials: true,
+  })
+);
+
+openapi.use(
+  "*",
+  csrf({
+    origin: ["http://example.com"],
+  })
+);
+
+// API Key Authentication Middleware
+openapi.use(async (c, next) => {
+  const apiKey = c.req.header("X-API-Key");
+  if (!apiKey || apiKey !== process.env.API_KEY) {
+    // Validate against API_KEY environment variable
+    throw new HTTPException(401, { message: "Invalid API Key." });
+  }
+  return await next();
+});
+
+openapi.use(async (c, next) => {
   if (!c.get("db")) {
     const db = drizzle(c.env.DB, { schema });
     c.set("db", db);
   }
   return await next();
-});
-
-// Setup OpenAPI registry
-const openapi = fromHono(app, {
-  docs_url: "/",
 });
 
 // Register OpenAPI endpoints

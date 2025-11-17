@@ -10,6 +10,9 @@ export class TaskFetch extends OpenAPIRoute {
       params: z.object({
         taskSlug: Str({ description: "Task slug" }),
       }),
+      headers: z.object({
+        "X-API-Key": z.string().describe("API Key for authentication"),
+      }),
     },
     responses: {
       "200": {
@@ -36,6 +39,7 @@ export class TaskFetch extends OpenAPIRoute {
           },
         },
       },
+      "401": { description: "Invalid API Key" },
     },
   };
 

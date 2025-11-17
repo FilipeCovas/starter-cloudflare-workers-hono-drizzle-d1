@@ -17,6 +17,9 @@ export class TaskList extends OpenAPIRoute {
           required: false,
         }),
       }),
+      headers: z.object({
+        "X-API-Key": z.string().describe("API Key for authentication"),
+      }),
     },
     responses: {
       "200": {
@@ -32,6 +35,7 @@ export class TaskList extends OpenAPIRoute {
           },
         },
       },
+      "401": { description: "Invalid API Key" },
     },
   };
 
