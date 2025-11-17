@@ -1,6 +1,7 @@
 import { Bool, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
 import { type AppContext, Task } from "../types";
+import { Tasks } from "../../drizzle/schema";
 
 export class TaskCreate extends OpenAPIRoute {
   schema = {
@@ -21,11 +22,9 @@ export class TaskCreate extends OpenAPIRoute {
         content: {
           "application/json": {
             schema: z.object({
-              series: z.object({
-                success: Bool(),
-                result: z.object({
-                  task: Task,
-                }),
+              success: Bool(),
+              result: z.object({
+                task: Task,
               }),
             }),
           },
@@ -41,18 +40,26 @@ export class TaskCreate extends OpenAPIRoute {
     // Retrieve the validated request body
     const taskToCreate = data.body;
 
-    // Implement your own object insertion here
+    const result = await c
+      .get("db")
+      .insert(Tasks)
+      .values({
+        name: taskToCreate.name,
+        slug: taskToCreate.slug,
+        description: taskToCreate.description,
+        completed: taskToCreate.completed,
+        due_date: new Date().toDateString(),
+      })
+      .returning();
 
-    /* const task = await c
-      .get("prisma")
-      .task.create({ data: taskToCreate as any }); */
-
-    //const result = await c.get("drizzle").select().from("users").all()
+    const createdTask = result[0];
 
     // return the new task
     return {
       success: true,
-      task: [],
+      result: {
+        task: createdTask,
+      },
     };
   }
 }

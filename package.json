@@ -7,6 +7,7 @@
     "dev": "wrangler dev",
     "start": "wrangler dev",
     "db:generate": "drizzle-kit generate",
+    "db:pull": "drizzle-kit pull",
     "db:push-local": "wrangler d1 migrations apply starter-cloudflare-workers-hono-drizzle-d1 --local",
     "db:push-remote": "wrangler d1 migrations apply starter-cloudflare-workers-hono-drizzle-d1 --remote",
     "db:studio": "drizzle-kit studio",

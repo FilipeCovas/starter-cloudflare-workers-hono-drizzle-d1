@@ -1,7 +1,6 @@
 import { Bool, Num, OpenAPIRoute } from "chanfana";
 import { z } from "zod";
 import { type AppContext, Task } from "../types";
-import { Tasks } from "../../drizzle/schema";
 
 export class TaskList extends OpenAPIRoute {
   schema = {
@@ -13,7 +12,7 @@ export class TaskList extends OpenAPIRoute {
           description: "Page number",
           default: 0,
         }),
-        isCompleted: Bool({
+        iscompleted: Bool({
           description: "Filter by completed flag",
           required: false,
         }),
@@ -25,11 +24,9 @@ export class TaskList extends OpenAPIRoute {
         content: {
           "application/json": {
             schema: z.object({
-              series: z.object({
-                success: Bool(),
-                result: z.object({
-                  tasks: Task.array(),
-                }),
+              success: Bool(),
+              result: z.object({
+                tasks: Task.array(),
               }),
             }),
           },
@@ -43,15 +40,26 @@ export class TaskList extends OpenAPIRoute {
     const data = await this.getValidatedData<typeof this.schema>();
 
     // Retrieve the validated parameters
-    const { page, isCompleted } = data.query;
+    const { page, iscompleted } = data.query;
 
-    // Implement your own object list here
+    // Define quantos itens por página você quer (por exemplo, 10)
+    const pageSize = 10;
+    const offset = page * pageSize;
 
-    const tasks = await c.get("drizzle").select().from(Tasks);
+    // Adiciona paginação na query
+    const pagedTasks = await c.get("db").query.Tasks.findMany({
+      where: iscompleted
+        ? (tasks, { eq }) => eq(tasks.completed, true)
+        : undefined,
+      limit: page === 1 ? 10 : pageSize,
+      offset: page === 1 ? 0 : offset,
+    });
 
     return {
       success: true,
-      tasks,
+      result: {
+        tasks: pagedTasks,
+      },
     };
   }
 }
